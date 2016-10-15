@@ -56,17 +56,22 @@ promise.then(function(response){
 	writer.end();
 });
 
-function convertTo1DArray(arr){
-	let finalArr = [];
+function convertTo1DArray(arr, finalArr){
+	var finalArr = finalArr || [];
 	for(let i=0; i<arr.length; i++){
 		if (Array.isArray(arr[i])){
-			finalArr.push.apply(finalArr, arr[i]);
+			convertTo1DArray(arr[i], finalArr)
 		}
 		else{
 			finalArr.push(arr[i]);
 		}
+
 	}
+
 	return finalArr;
+
+	
+	
 }
 
 function convertArrToCsv(arr){
