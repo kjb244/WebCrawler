@@ -12,8 +12,6 @@ let promise = new Promise(function(resolve, reject){
 	
 		getHtml(fileArr[i]).then(function(response){
 
-			
-	
 			let obj = {
 				url: fileArr[i],
 				html: response.html,
@@ -26,9 +24,6 @@ let promise = new Promise(function(resolve, reject){
 				let matched = matcher.test(obj.html);
 				obj.regexArr[regexArr[j]] = matched;
 			}
-
-
-
 
 			finalObject.push(obj);
 
@@ -48,17 +43,49 @@ promise.then(function(response){
 	let fileName = 'output.csv';
 	fs.unlinkSync(`./${fileName}`);
 	let writer = fs.createWriteStream(`./${fileName}`, { flags: 'a'});
-	writer.write('URL,' + regexArr.join(',') + ',Redirect\r\n');
+	writer.write(convertArrToCsv(['URL', regexArr, 'Redirect']));
 
 	for(let i=0; i<finalObject.length; i++){
 
 		let holder = finalObject[i];
 		let redirect = holder.redirect.new || false;
-		writer.write(holder.url + ',' + Object.keys(holder.regexArr).map(key => holder.regexArr[key]).join(',') + ',' + redirect + '\r\n');
+		let regexMatches = Object.keys(holder.regexArr).map(key => holder.regexArr[key]);
+		writer.write(convertArrToCsv([holder.url, regexMatches, redirect]));
 	}
 
 	writer.end();
 });
+
+function convertTo1DArray(arr){
+	let finalArr = [];
+	for(let i=0; i<arr.length; i++){
+		if (Array.isArray(arr[i])){
+			finalArr.push.apply(finalArr, arr[i]);
+		}
+		else{
+			finalArr.push(arr[i]);
+		}
+	}
+	return finalArr;
+}
+
+function convertArrToCsv(arr){
+	arr = convertTo1DArray(arr);
+	let finalArr = [];
+	for(let i=0; i<arr.length; i++){
+		finalArr[i] = convertStringToCsv(arr[i]);
+	}
+
+
+	return finalArr.join(',') + '\r\n';
+	
+}
+
+function convertStringToCsv(inp){
+
+	inp = inp.toString();
+	return inp.includes(',') == true ? `"${inp}"` : inp;
+}
 
 
 

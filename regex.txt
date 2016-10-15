@@ -1,2 +1,2 @@
-abcdef
-\d{300}
+abc,def
+\d{3}
