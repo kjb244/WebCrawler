@@ -1,3 +1,0 @@
-URL,"abc,def",\d{3},Redirect
-http://www.cnn.com,false,true,false
-https://jigsaw.w3.org/HTTP/300/307.html,false,true,https://jigsaw.w3.org/HTTP/300/Overview.html

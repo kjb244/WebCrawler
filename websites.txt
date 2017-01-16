@@ -1,2 +1,0 @@
-http://www.cnn.com
-https://jigsaw.w3.org/HTTP/300/307.html
